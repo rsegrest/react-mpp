@@ -5,9 +5,23 @@
 # Based on:
 # https://blog.bitsrc.io/create-react-app-without-create-react-app-b0a5806a92
 
-mkdir manual-react-app; cd manual-react-app
+if [ -z "$1" ]
+  then
+    DIRECTORY=$1
+fi
 
-# Create .gitignore file
+if [ -z "$1" ]
+then
+        DIRECTORY="new_react_app"
+else
+        DIRECTORY=$1
+fi
+
+# 1. Create directory for new application
+echo "Creating directory for new app: $DIRECTORY"
+mkdir $DIRECTORY; cd $DIRECTORY
+
+# 2. Create .gitignore file
 echo "Creating .gitignore"
 cat << EOF >> .gitignore
 node_modules/
@@ -15,22 +29,7 @@ package-lock.json
 yarn.lock
 EOF
 
-# # Create manifest.json file
-# echo "Creating manifest.json"
-# cat << EOF >> manifest.json
-# {
-#   "short_name": "A React App",
-#   "name": "Manual React App creation",
-#   "start_url": ".",
-#   "display": "standalone",
-#   "theme_color": "#000000",
-#   "background_color": "#ffffff"
-# }
-# EOF
-
-
-
-# Create package.json file
+# 3. Create package.json file
 echo "Creating package.json"
 cat << EOF >> package.json
 {
@@ -44,59 +43,35 @@ cat << EOF >> package.json
     "test": "test"
   },
   "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@babel/core": "^7.17.2",
-    "@babel/plugin-transform-runtime": "^7.17.0",
-    "@babel/preset-env": "^7.16.11",
-    "@babel/preset-react": "^7.16.7",
-    "@babel/runtime": "^7.17.2",
-    "babel-eslint": "^10.1.0",
-    "babel-loader": "^8.2.3",
-    "eslint": "^8.9.0",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-jest": "^26.1.0",
-    "webpack": "^5.68.0",
-    "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^4.7.4"
-  },
-  "dependencies": {
-    "@babel/cli": "^7.17.0",
-    "path": "^0.12.7",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
-  }
+  "license": "MIT"
 }
 EOF
 
 
-# Run npm install to load dependencies in package.json
-echo "Running npm install"
-npm i
-
+# 4. Add webpack and related dependencies
 echo "Installing webpack dependencies..."
 echo "Webpack is a lightweight bundler and webserver for your React application."
 npm i --save-dev webpack webpack-cli webpack-dev-server html-webpack-plugin
 
+# 5. Add Babel and related dependencies
 echo "Installing Babel..."
 echo "Babel is a JavaScript transpiler that allows you to code in the latest versions of JavaScript, then converts it into a version compatible with a variety of browsers."
 npm i --save-dev babel-loader @babel/preset-env @babel/core @babel/plugin-transform-runtime @babel/preset-react @babel/runtime @babel/cli
 
+# 6. Add webpack and related dependencies
 echo "Installing ESLint server and configuration template (AirBNB ruleset)..."
 npm i --save-dev eslint eslint-config-airbnb-base eslint-plugin-jest eslint-config-prettier path
 
+# 7. Add React library and React-DOM
 echo "Install React and React-DOM libraries"
 npm i react react-dom
 
+# 8. Create public folder for static files
 echo "Create a \"public\" folder, and create an \"index.html\" file inside it."
 mkdir public
 mkdir src
 
-echo "Creating a basic \"App.js\" file."
-
-
-# Create index.html file
+# 9. Creating index.html file inside public folder
 echo "Creating index.html"
 cat << EOF >> public/index.html
 <!DOCTYPE html>
@@ -115,8 +90,20 @@ cat << EOF >> public/index.html
 </html>
 EOF
 
-# Write out App.js
-cat << EOF >> App.js
+# 10. Write out index.js
+echo "Creating index.js"
+cat << EOF >> index.js
+import React from "react";
+import reactDOM from "react-dom";
+import App from "./App";
+
+reactDOM.render(<App />, document.getElementById("root"));
+EOF
+
+
+# 11. Write out initial App.jsx
+echo "Creating a basic \"App.jsx\" file."
+cat << EOF >> App.jsx
 import React from "react";
 
 const App = () =>{
@@ -131,17 +118,7 @@ export default App;
 EOF
 
 
-# Write out index.js
-echo "Creating index.js"
-cat << EOF >> index.js
-import React from "react";
-import reactDOM from "react-dom";
-import App from "./App";
-
-reactDOM.render(<App />, document.getElementById("root"));
-EOF
-
-# Write out webpack.config.js (Webpack configuration file)
+# 12. Write out webpack.config.js (Webpack configuration file)
 echo "Creating webpack config file"
 cat << EOF >> webpack.config.js
 const path = require("path");
@@ -231,7 +208,7 @@ module.exports={
 }
 EOF
 
-# Create .babelrc file
+# 13. Create .babelrc (Babel configuration) file
 echo "Creating .babelrc"
 cat << EOF >> .babelrc
 {
@@ -251,5 +228,3 @@ cat << EOF >> .babelrc
     ]
 }
 EOF
-
-npm i
