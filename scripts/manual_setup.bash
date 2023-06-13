@@ -67,7 +67,7 @@ echo "Install React and React-DOM libraries"
 npm i react react-dom
 
 # 8. Create public folder for static files
-echo "Create a \"public\" folder, and create an \"index.html\" file inside it."
+echo "Create a \"public\" and \"src\" folder."
 mkdir public
 mkdir src
 
@@ -92,7 +92,7 @@ EOF
 
 # 10. Write out index.js
 echo "Creating index.js"
-cat << EOF >> index.js
+cat << EOF >> src/index.js
 import React from "react";
 import reactDOM from "react-dom";
 import App from "./App";
@@ -103,7 +103,7 @@ EOF
 
 # 11. Write out initial App.jsx
 echo "Creating a basic \"App.jsx\" file."
-cat << EOF >> App.jsx
+cat << EOF >> src/App.jsx
 import React from "react";
 
 const App = () =>{
@@ -228,3 +228,4 @@ cat << EOF >> .babelrc
     ]
 }
 EOF
+
