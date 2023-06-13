@@ -49,7 +49,7 @@ Set-Content -Path package.json -Value $PackageJsonFile
 # 4. Add webpack and related dependencies
 Write-Host "Installing webpack dependencies..."
 Write-Host "Webpack is a lightweight bundler and webserver for your React application."
-npm i --save-dev webpack webpack-cli webpack-dev-server
+npm i --save-dev webpack webpack-cli webpack-dev-server html-webpack-plugin
 
 # 5. Add Babel and related dependencies
 Write-Host "Installing Babel..."
@@ -97,7 +97,7 @@ import App from "./App";
 
 reactDOM.render(<App />, document.getElementById("root"));
 "@
-Set-Content -Path src\\index.html -Value $IndexJsFile
+Set-Content -Path src\\index.js -Value $IndexJsFile
 
 # 11. Write out initial App.jsx file
 Write-Host "Creating a basic ""App.jsx"" file."
