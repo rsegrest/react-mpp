@@ -5,34 +5,115 @@
 # Based on:
 # https://blog.bitsrc.io/create-react-app-without-create-react-app-b0a5806a92
 
+mkdir manual-react-app; cd manual-react-app
+
+# Create .gitignore file
+echo "Creating .gitignore"
+cat << EOF >> .gitignore
+node_modules/
+package-lock.json
+yarn.lock
+EOF
+
+# # Create manifest.json file
+# echo "Creating manifest.json"
+# cat << EOF >> manifest.json
+# {
+#   "short_name": "A React App",
+#   "name": "Manual React App creation",
+#   "start_url": ".",
+#   "display": "standalone",
+#   "theme_color": "#000000",
+#   "background_color": "#ffffff"
+# }
+# EOF
+
+
+
+# Create package.json file
+echo "Creating package.json"
+cat << EOF >> package.json
+{
+  "name": "new-react-app",
+  "version": "1.0.0",
+  "description": "A new react app without CRA",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server .",
+    "build": "Webpack .",
+    "test": "test"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.17.2",
+    "@babel/plugin-transform-runtime": "^7.17.0",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-react": "^7.16.7",
+    "@babel/runtime": "^7.17.2",
+    "babel-eslint": "^10.1.0",
+    "babel-loader": "^8.2.3",
+    "eslint": "^8.9.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-jest": "^26.1.0",
+    "webpack": "^5.68.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.7.4"
+  },
+  "dependencies": {
+    "@babel/cli": "^7.17.0",
+    "path": "^0.12.7",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  }
+}
+EOF
+
+
+# Run npm install to load dependencies in package.json
+echo "Running npm install"
+npm i
+
 echo "Installing webpack dependencies..."
 echo "Webpack is a lightweight bundler and webserver for your React application."
-npm i --save-dev webpack webpack-cli webpack-dev-server
+npm i --save-dev webpack webpack-cli webpack-dev-server html-webpack-plugin
 
 echo "Installing Babel..."
 echo "Babel is a JavaScript transpiler that allows you to code in the latest versions of JavaScript, then converts it into a version compatible with a variety of browsers."
-npm i --save-dev babel-loader @babel/preset-env @babel/core
-@babel/plugin-transform-runtime
-@babel/preset-react
-@babel/runtime
-@babel/cli
+npm i --save-dev babel-loader @babel/preset-env @babel/core @babel/plugin-transform-runtime @babel/preset-react @babel/runtime @babel/cli
 
 echo "Installing ESLint server and configuration template (AirBNB ruleset)..."
-npm i --save-dev eslint eslint-config-airbnb-base
-eslint-plugin-jest
-eslint-config-prettier
-path
+npm i --save-dev eslint eslint-config-airbnb-base eslint-plugin-jest eslint-config-prettier path
 
 echo "Install React and React-DOM libraries"
 npm i react react-dom
 
 echo "Create a \"public\" folder, and create an \"index.html\" file inside it."
 mkdir public
-cd public
-touch index.html
+mkdir src
 
 echo "Creating a basic \"App.js\" file."
-touch App.js
+
+
+# Create index.html file
+echo "Creating index.html"
+cat << EOF >> public/index.html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <title>React App</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+  </body>
+</html>
+EOF
 
 # Write out App.js
 cat << EOF >> App.js
@@ -64,6 +145,7 @@ EOF
 echo "Creating webpack config file"
 cat << EOF >> webpack.config.js
 const path = require("path");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 /*We are basically telling webpack to take index.js from entry. Then check for all file extensions in resolve. 
 After that apply all the rules in module.rules and produce the output and place it in main.js in the public folder.*/
@@ -139,7 +221,13 @@ module.exports={
                 use:  'babel-loader' //loader which we are going to use
             }
         ]
-    }
+    },
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: './public/index.html',
+            filename: './index.html',
+        }),
+    ]
 }
 EOF
 
@@ -164,42 +252,4 @@ cat << EOF >> .babelrc
 }
 EOF
 
-# Create package.json file
-echo "Creating package.json"
-cat << EOF >> package.json
-{
-  "name": "new-react-app",
-  "version": "1.0.0",
-  "description": "A new react app without CRA",
-  "main": "index.js",
-  "scripts": {
-    "start": "webpack-dev-server .",
-    "build": "Webpack .",
-    "test": "test"
-  },
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@babel/core": "^7.17.2",
-    "@babel/plugin-transform-runtime": "^7.17.0",
-    "@babel/preset-env": "^7.16.11",
-    "@babel/preset-react": "^7.16.7",
-    "@babel/runtime": "^7.17.2",
-    "babel-eslint": "^10.1.0",
-    "babel-loader": "^8.2.3",
-    "eslint": "^8.9.0",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-jest": "^26.1.0",
-    "webpack": "^5.68.0",
-    "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^4.7.4"
-  },
-  "dependencies": {
-    "@babel/cli": "^7.17.0",
-    "path": "^0.12.7",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
-  }
-}
-EOF
+npm i
