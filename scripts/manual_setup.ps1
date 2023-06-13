@@ -1,40 +1,107 @@
-#!/usr/bin/bash
-
 # Windows PowerShell script to set up a React application without using create-react-app
 
 # Based on:
 # https://blog.bitsrc.io/create-react-app-without-create-react-app-b0a5806a92
 
-print "Installing webpack dependencies..."
-print "Webpack is a lightweight bundler and webserver for your React application."
+Param(
+	[string]$arg1
+)
+
+if ($PSBoundParameters.ContainsKey('arg1')) {
+	Write-Host "The first argument is $($PSBoundParameters['arg1']))"
+	$DIRECTORY=$arg1
+} else {
+	Write-Host "No arguments passed..."
+	$DIRECTORY="default_folder"
+}
+
+# 1. Create directories for new application
+Write-Host "Creating directory for new app: $DIRECTORY"
+mkdir $DIRECTORY
+Set-Location $DIRECTORY
+
+# 2. Create .gitignore file
+$GitIgnoreFile=@"
+node_modules/
+package-lock.json
+yarn.lock
+"@
+Set-Content -Path .gitignore -Value $GitIgnoreFile
+
+# 3. Create package.json file
+$PackageJsonFile=@"
+{
+    "name": "new-react-app",
+    "version": "1.0.0",
+    "description": "A new react app without CRA",
+    "main": "index.js",
+    "scripts": {
+      "start": "webpack-dev-server .",
+      "build": "Webpack .",
+      "test": "test"
+    },
+    "author": "",
+    "license": "MIT"
+  }
+"@
+Set-Content -Path package.json -Value $PackageJsonFile
+
+# 4. Add webpack and related dependencies
+Write-Host "Installing webpack dependencies..."
+Write-Host "Webpack is a lightweight bundler and webserver for your React application."
 npm i --save-dev webpack webpack-cli webpack-dev-server
 
-print "Installing Babel..."
-print "Babel is a JavaScript transpiler that allows you to code in the latest versions of JavaScript, then converts it into a version compatible with a variety of browsers."
-npm i --save-dev babel-loader @babel/preset-env @babel/core
-# @babel/plugin-transform-runtime
-# @babel/preset-react
-# @babel/runtime
-# @babel/cli
+# 5. Add Babel and related dependencies
+Write-Host "Installing Babel..."
+Write-Host "Babel is a JavaScript transpiler that allows you to code in the latest versions of JavaScript, then converts it into a version compatible with a variety of browsers."
+npm i --save-dev babel-loader @babel/preset-env @babel/core @babel/plugin-transform-runtime @babel/preset-react @babel/runtime @babel/cli
 
-print "Installing ESLint server and configuration template (AirBNB ruleset)..."
-npm i --save-dev eslint eslint-config-airbnb-base
-eslint-plugin-jest
-eslint-config-prettier
-path
+# 6. Add ESLint and configuration
+Write-Host "Installing ESLint server and configuration template (AirBNB ruleset)..."
+npm i --save-dev eslint eslint-config-airbnb-base eslint-plugin-jest eslint-config-prettier path
 
-print "Install React and React-DOM libraries"
+# 7. Add React library and React-DOM
+Write-Host "Install React and React-DOM libraries"
 npm i react react-dom
 
-print "Create a \"public\" folder, and create an \"index.html\" file inside it."
+# 8. Create public folder for static files and src folder for React and JS code
+Write-Host "Creating ""public"" and ""src"" folders"
 mkdir public
-Set-Location public
-touch index.html
+mkdir src
 
-print "Creating a basic \"App.js\" file."
-# Write out App.js
-# cat << EOF >> App.js
-$AppJSFile=@"
+# 9. Create index.html file inside the public folder
+$IndexHtmlFile=@"
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <title>React App</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+  </body>
+</html>
+"@
+Set-Content -Path public\\index.html -Value $IndexHtmlFile
+
+# 10. Write out index.js
+Write-Host "Creating index.js"
+$IndexJsFile=@"
+import React from "react";
+import reactDOM from "react-dom";
+import App from "./App";
+
+reactDOM.render(<App />, document.getElementById("root"));
+"@
+Set-Content -Path src\\index.html -Value $IndexJsFile
+
+# 11. Write out initial App.jsx file
+Write-Host "Creating a basic ""App.jsx"" file."
+$AppJSXFile=@"
 import React from "react";
 
 const App = () =>{
@@ -47,25 +114,13 @@ const App = () =>{
 
 export default App;
 "@
-Set-Content -Path App.js -Value $AppJSFile
+Set-Content -Path src\\App.jsx -Value $AppJSXFile
 
-
-# Write out index.js
-print "Creating index.js"
-# cat << EOF >> index.js
-$IndexJSFile=@"
-import React from "react";
-import reactDOM from "react-dom";
-import App from "./App";
-
-reactDOM.render(<App />, document.getElementById("root"));
-"@
-Set-Content -Path index.js -Value $IndexJSFile
-
-# Write out webpack.config.js (Webpack configuration file)
-print "Creating webpack config file"
+# 12. Write out webpack.config.js (Webpack configuration file)
+Write-Host "Creating webpack.config.js file."
 $WebpackConfigFile=@"
 const path = require("path");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 /*We are basically telling webpack to take index.js from entry. Then check for all file extensions in resolve. 
 After that apply all the rules in module.rules and produce the output and place it in main.js in the public folder.*/
@@ -141,13 +196,19 @@ module.exports={
                 use:  'babel-loader' //loader which we are going to use
             }
         ]
-    }
+    },
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: './public/index.html',
+            filename: './index.html',
+        }),
+    ]
 }
 "@
-Set-Content -Path webpack.config.js -Value $WebpackConfigFile
+Set-Content -Path webpack.config.js -Value $WebPackConfigFile
 
-# Create .babelrc file
-print "Creating .babelrc"
+
+# 13. Create .babelrc file
 $BabelRCFile=@"
 {
     /*
@@ -168,45 +229,5 @@ $BabelRCFile=@"
 "@
 Set-Content -Path .babelrc -Value $BabelRCFile
 
-# Create package.json file
-print "Creating package.json"
-$PackageJsonFile=@"
-{
-  "name": "new-react-app",
-  "version": "1.0.0",
-  "description": "A new react app without CRA",
-  "main": "index.js",
-  "scripts": {
-    "start": "webpack-dev-server .",
-    "build": "Webpack .",
-    "test": "test"
-  },
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@babel/core": "^7.17.2",
-    "@babel/plugin-transform-runtime": "^7.17.0",
-    "@babel/preset-env": "^7.16.11",
-    "@babel/preset-react": "^7.16.7",
-    "@babel/runtime": "^7.17.2",
-    "babel-eslint": "^10.1.0",
-    "babel-loader": "^8.2.3",
-    "eslint": "^8.9.0",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-jest": "^26.1.0",
-    "webpack": "^5.68.0",
-    "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^4.7.4"
-  },
-  "dependencies": {
-    "@babel/cli": "^7.17.0",
-    "path": "^0.12.7",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
-  }
-}
-"@
-Set-Content -Path package.json -Value $PackageJsonFile
 
-print "Finished setting up React App."
+Write-Host "Finished setting up React App."

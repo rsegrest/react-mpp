@@ -58,7 +58,7 @@ echo "Installing Babel..."
 echo "Babel is a JavaScript transpiler that allows you to code in the latest versions of JavaScript, then converts it into a version compatible with a variety of browsers."
 npm i --save-dev babel-loader @babel/preset-env @babel/core @babel/plugin-transform-runtime @babel/preset-react @babel/runtime @babel/cli
 
-# 6. Add webpack and related dependencies
+# 6. Add ESLint and configuration
 echo "Installing ESLint server and configuration template (AirBNB ruleset)..."
 npm i --save-dev eslint eslint-config-airbnb-base eslint-plugin-jest eslint-config-prettier path
 
@@ -229,3 +229,4 @@ cat << EOF >> .babelrc
 }
 EOF
 
+echo "Finished setting up React App."
