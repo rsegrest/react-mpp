@@ -83,10 +83,14 @@ const ToDoList = ({
           className="todo-list-new-submit"
           type="button"
           value="ADD ITEM"
-          onClick={() => addToDoItem({
-            id: idCounter,
-            text: toDoInputText,
-          })}
+          onClick={() => {
+            const text = toDoInputText;
+            setToDoInputText('');
+            addToDoItem({
+              id: idCounter,
+              text,
+            });
+          }}
         />
       </div>
     </div>
