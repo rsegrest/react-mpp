@@ -1,0 +1,25 @@
+// Set up front-end with static data
+. Create and style outer container in "ToDoList" component with heading
+. Create and style inner container in "ToDoItem" component with placeholder text
+
+// Add details to components
+. Conditionally strikethrough text if item is complete
+. Add a checkbox to each item enable ability to mark as complete
+. Add an input field and a button to "add new item" to the to-do list
+. Add an "X" button to each item enable ability to delete
+
+// Set up some static sample data to work with
+. Determine data structure and come up with static sample data that matches that format, assign to "const initialToDoList = "
+. Pass static data list into "ToDoList" component as a prop, set up state with "useState" hook using initial list
+. Use map() to pass in each object, replace placeholder text with sample text
+
+// Set up functions to operate on data
+. Create state in "ToDoList" component to track user input in text field
+. Set up change handler on input field
+. Set up button click handler to add item
+. Set up button click handler to delete item
+. Set up checkbox click handler to toggle whether item is complete
+
+// Allow persistance (so list is not lost when webpage is refreshed)
+. Load initial list from local storage
+. Save list to local storage when list is updated (add or remove item, toggle complete)

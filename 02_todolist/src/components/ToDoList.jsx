@@ -21,6 +21,12 @@ const ToDoList = ({
       }
     };
     setToDoList(newToDoList)
+    // *** Save to local storage
+    //  On a real application,
+    //  you would want to handle local storage in a separate class,
+    //  so you could replace it with a database or different type of storage
+    // (Cohesion and Separation of Concerns, SOLID principles)
+    // Facade pattern
     localStorage.setItem('toDoList', JSON.stringify(newToDoList));
     // increment idCounter for next item
     setIdCounter(idCounter + 1);
@@ -43,6 +49,7 @@ const ToDoList = ({
     //    Otherwise, the screen will not update with the new state
     let newToDoList = {...toDoList};
     newToDoList[id].done = !newToDoList[id].done;
+    localStorage.setItem('toDoList', JSON.stringify(newToDoList));
     // Overwrite the entire (old) object with the new object
     setToDoList(newToDoList);
   }
