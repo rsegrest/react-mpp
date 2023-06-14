@@ -1,0 +1,94 @@
+.App {
+  text-align: center;
+  vertical-align: middle;
+  height: 100vh;
+  width: 100vw;
+  margin: auto;
+  border: 1px solid gray;
+  background-color: greenyellow;
+}
+
+.center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.todo-list-container {
+  border: 1px solid gray;
+  width: 30rem;
+  max-width: 90vw;
+  margin: auto;
+  text-align: center;
+  vertical-align: middle;
+  background-color: #454465;
+  padding-top: 1rem;
+}
+
+.todo-list-title {
+  color: white;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.todo-list-new-submit {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  width: 6rem;
+  height: 2rem;
+  border: 2px solid limegreen;
+  background-color: darkgreen;
+  font-weight: bold;
+  font-size: 1rem;
+  color: white;
+}
+
+.todo-list-new-submit:hover {
+  background-color: limegreen;
+  color: black;
+  border: 3px solid white;
+}
+
+.todo-list-new-input {
+  display: inline;
+  width: 20rem;
+  margin-right: 1rem;
+  border-radius: 0;
+  height: 1.1rem;
+  font-size: 1.0rem;
+  padding: 0.5rem;
+}
+
+.todo-list-new-input:focus {
+  outline: none;
+}

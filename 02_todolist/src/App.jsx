@@ -1,35 +1,27 @@
-import ToDoItem from './components/ToDoItem';
-import './styles/App.css';
+
+import React, {
+    useState,
+} from 'react';
+import ToDoList from './components/ToDoList';
 
 const App = () => {
-  let count = 0;
+    let [idCounter, setIdCounter] = useState(0);
+    // Get from local storage if it exists
+    //    parse serialized string into an object
+    //    if not (||), set to empty object ({})
+    const initialToDoList = (
+        JSON.parse(localStorage.getItem('toDoList'))
+        || {}
+    );
+
   return (
-    <div className="App">
-      <div
-        style={{
-          border: '1px solid gray',
-          width: '50vw',
-          margin: 'auto',
-          textAlign: 'center',
-          backgroundColor: '#454465'
-        }}
-      >
-        <h1
-          style={{
-            color: 'white',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-            marginTop: 'auto',
-            marginBottom: '1rem',
-            textAlign: 'center'
-          }}
-        >TO-DO LIST</h1>
-        <ToDoItem id={(count += 1)} />
-        <ToDoItem id={(count += 1)} />
-        <ToDoItem id={(count += 1)} />
-        <ToDoItem id={(count += 1)} />
-      </div>
-    </div>
+        <div className="App">
+            <ToDoList
+                idCounter={idCounter}
+                setIdCounter={setIdCounter}
+                initialToDoList={initialToDoList}
+            />
+        </div>
   );
 }
 
