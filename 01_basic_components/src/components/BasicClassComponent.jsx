@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import '../styles/App.css';
 
-class BasicFunctionalComponent extends Component {
+class BasicClassComponent extends Component {
   constructor(props) {
     super(props);
     this.state = { myNameFromState: props.aNameProp || "World" };
@@ -28,4 +28,4 @@ class BasicFunctionalComponent extends Component {
   }
 }
 
-export default BasicFunctionalComponent;
+export default BasicClassComponent;
