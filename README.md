@@ -10,5 +10,5 @@ cd 02_todolist
 Then, run "npm i" (install) to install dependencies, and "npm run dev" to run the development version of the site with the webpack web server:
 ```bash
 npm i
-npm run dev
+npm start 
 ```
